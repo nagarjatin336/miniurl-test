@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, request
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from routes.auth import auth_bp
@@ -23,6 +23,7 @@ app.register_blueprint(user_bp)
 
 @app.route('/')
 def index():
+  print(request.headers['X-Forwarded-For'].split(','))
   return app.send_static_file("index.html")
 
 @app.route('/favicon.ico')
