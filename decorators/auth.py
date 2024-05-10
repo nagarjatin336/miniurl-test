@@ -4,12 +4,14 @@ from functools import wraps
 def auth_required(f):
   @wraps(f)
   def decorated_function(*args, **kwargs):
-    print('Session Address: '+session.get('address'))
-    print('Request Address: '+request.remote_addr)
     if session.get('address') is None or session.get('user') is None:
       return jsonify({'type': 'error', 'message': 'user not logged in'}), 401
     if session.get('address') != request.remote_addr:
+      print('Session Address(!=): '+session.get('address'))
+      print('Request Address(!=): '+request.remote_addr)
       return jsonify({'type': 'error', 'message': 'unauthorized'}), 401
+    print('Session Address: '+session.get('address'))
+    print('Request Address: '+request.remote_addr)
     request.data = session.get('user')
     return f(*args, **kwargs)
   return decorated_function
