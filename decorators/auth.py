@@ -4,6 +4,7 @@ from functools import wraps
 def auth_required(f):
   @wraps(f)
   def decorated_function(*args, **kwargs):
+    print('Auth Decorator: '+request.headers.get('X-Forwarded-For','Header (X-Forwarded-For) Not Found'))
     if session.get('address') is None or session.get('user') is None:
       return jsonify({'type': 'error', 'message': 'user not logged in'}), 401
     if session.get('address') != request.remote_addr:
